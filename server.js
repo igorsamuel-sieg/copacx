@@ -373,12 +373,9 @@ wss.on('connection', (ws, req) => {
           }
         }
 
-        // Apenas Master e Espectadores recebem atualização geral a cada clique.
-        // Jogadores NÃO recebem room_state durante o jogo — com 100+ pessoas
-        // isso geraria uma avalanche de mensagens desnecessárias a cada clique.
-        // Cada jogador já recebe seu próprio click_result acima.
-        broadcastToMasters(ws.roomId, roomSnapshot(room, true));
-        broadcastToSpectators(ws.roomId, spectatorSnapshot(room));
+        // Nenhum broadcast geral a cada clique — só o próprio jogador recebe click_result.
+        // Master e Espectadores são atualizados apenas em eventos relevantes:
+        // finishers_update (alguém terminou) e winner_announced (jogo encerrado).
         break;
       }
 
