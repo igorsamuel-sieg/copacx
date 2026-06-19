@@ -1,0 +1,1575 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>⚽ VAR da Qualidade — Copa CX SIEG</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800;900&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --gold:    #f0c040;
+      --gold2:   #c8960a;
+      --navy:    #0a1628;
+      --navy2:   #0f1f3a;
+      --navy3:   #152a50;
+      --white:   #ffffff;
+      --text:    #e8eaf0;
+      --muted:   rgba(240,192,64,.55);
+
+      --branco:  #f5f5f5;
+      --amarelo: #f0c040;
+      --azul:    #3a7bd5;
+      --verde:   #2ecc71;
+
+      --t-branco-bg:   rgba(245,245,245,.12);
+      --t-branco-bd:   rgba(245,245,245,.5);
+      --t-amarelo-bg:  rgba(240,192,64,.15);
+      --t-amarelo-bd:  rgba(240,192,64,.6);
+      --t-azul-bg:     rgba(58,123,213,.15);
+      --t-azul-bd:     rgba(58,123,213,.6);
+      --t-verde-bg:    rgba(46,204,113,.12);
+      --t-verde-bd:    rgba(46,204,113,.5);
+    }
+
+    html, body {
+      min-height: 100vh;
+      font-family: 'Barlow', sans-serif;
+      background: var(--navy);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    /* Field pattern background */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        repeating-linear-gradient(
+          180deg,
+          rgba(255,255,255,.018) 0px,
+          rgba(255,255,255,.018) 40px,
+          transparent 40px,
+          transparent 80px
+        );
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .wrap {
+      position: relative;
+      z-index: 1;
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 20px 16px 60px;
+    }
+
+    /* ── Pages ── */
+    .page { display: none; }
+    .page.active { display: block; }
+
+    /* ── Header ── */
+    .header {
+      text-align: center;
+      margin-bottom: 20px;
+      padding: 18px 0 10px;
+    }
+    .header-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--navy2), var(--navy3));
+      border: 2px solid var(--gold);
+      border-radius: 8px;
+      padding: 6px 20px;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .header-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: clamp(28px, 7vw, 52px);
+      font-weight: 900;
+      color: var(--white);
+      letter-spacing: 2px;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+    .header-title span { color: var(--gold); }
+    .header-sub {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 6px;
+      letter-spacing: 1px;
+    }
+
+    /* ── Card ── */
+    .card {
+      background: linear-gradient(135deg, var(--navy2), var(--navy3));
+      border: 1px solid rgba(240,192,64,.25);
+      border-radius: 10px;
+      padding: 22px 20px;
+      margin-bottom: 16px;
+      box-shadow: 0 4px 24px rgba(0,0,0,.4);
+    }
+
+    /* ── Section title ── */
+    .sec-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--gold);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(240,192,64,.2);
+    }
+
+    /* ── Forms ── */
+    label {
+      display: block;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin: 14px 0 5px;
+    }
+    label:first-child { margin-top: 0; }
+
+    input[type="text"], input[type="password"] {
+      width: 100%;
+      background: rgba(0,0,0,.4);
+      border: 1px solid rgba(240,192,64,.3);
+      border-radius: 6px;
+      padding: 10px 14px;
+      color: var(--white);
+      font-family: 'Barlow', sans-serif;
+      font-size: 15px;
+      outline: none;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    input:focus { border-color: var(--gold); box-shadow: 0 0 0 2px rgba(240,192,64,.15); }
+
+    /* ── Team buttons ── */
+    .team-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-top: 6px;
+    }
+    .team-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 11px 14px;
+      border-radius: 7px;
+      border: 2px solid transparent;
+      cursor: pointer;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      transition: all .2s;
+      background: none;
+      color: var(--text);
+    }
+    .team-btn .dot {
+      width: 12px; height: 12px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .team-btn[data-team="branco"]  { border-color: rgba(245,245,245,.3);  background: var(--t-branco-bg); }
+    .team-btn[data-team="amarelo"] { border-color: rgba(240,192,64,.3);   background: var(--t-amarelo-bg); }
+    .team-btn[data-team="azul"]    { border-color: rgba(58,123,213,.3);   background: var(--t-azul-bg); }
+    .team-btn[data-team="verde"]   { border-color: rgba(46,204,113,.3);   background: var(--t-verde-bg); }
+
+    .team-btn.selected[data-team="branco"]  { border-color: var(--branco);  background: rgba(245,245,245,.22); color:#fff; }
+    .team-btn.selected[data-team="amarelo"] { border-color: var(--amarelo); background: rgba(240,192,64,.28);  color:#fff; }
+    .team-btn.selected[data-team="azul"]    { border-color: var(--azul);    background: rgba(58,123,213,.3);   color:#fff; }
+    .team-btn.selected[data-team="verde"]   { border-color: var(--verde);   background: rgba(46,204,113,.25);  color:#fff; }
+
+    .dot-branco  { background: var(--branco); }
+    .dot-amarelo { background: var(--amarelo); }
+    .dot-azul    { background: var(--azul); }
+    .dot-verde   { background: var(--verde); }
+
+    /* ── Buttons ── */
+    .btn {
+      width: 100%;
+      border: none;
+      border-radius: 7px;
+      padding: 13px;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      cursor: pointer;
+      transition: all .2s;
+      text-transform: uppercase;
+      margin-top: 14px;
+    }
+    .btn:hover  { filter: brightness(1.12); transform: translateY(-1px); }
+    .btn:active { transform: translateY(0); }
+    .btn-gold   { background: linear-gradient(135deg, var(--gold2), var(--gold), var(--gold2)); color: var(--navy); }
+    .btn-green  { background: linear-gradient(135deg, #145a32, #27ae60, #145a32); color: #cfffdf; margin-top: 10px; }
+    .btn-red    { background: linear-gradient(135deg, #5a0a0a, #c0392b, #5a0a0a); color: #ffcfcf; margin-top: 10px; }
+    .btn-outline {
+      background: transparent;
+      border: 1px solid rgba(240,192,64,.4);
+      color: var(--gold);
+      padding: 8px 18px;
+      width: auto;
+      margin-top: 0;
+      font-size: 11px;
+    }
+    .btn-outline:hover { background: rgba(240,192,64,.08); filter: none; transform: none; }
+
+    /* Mode toggle */
+    .mode-toggle {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 20px;
+      background: rgba(0,0,0,.3);
+      border-radius: 7px;
+      padding: 4px;
+    }
+    .mode-btn {
+      flex: 1;
+      padding: 9px;
+      border-radius: 5px;
+      border: none;
+      cursor: pointer;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      transition: all .2s;
+    }
+    .mode-btn.active { background: var(--gold); color: var(--navy); }
+    .mode-btn:not(.active) { background: transparent; color: rgba(240,192,64,.45); }
+
+    /* ── Error messages ── */
+    .error-msg {
+      color: #ff8080;
+      font-size: 13px;
+      margin-top: 10px;
+      text-align: center;
+      font-style: italic;
+      min-height: 18px;
+    }
+
+    /* ── Waiting dots ── */
+    .dots { display: flex; justify-content: center; gap: 6px; margin: 14px 0; }
+    .dot-anim { width: 8px; height: 8px; border-radius: 50%; background: var(--gold); animation: bounce 1.4s ease-in-out infinite; }
+    .dot-anim:nth-child(2) { animation-delay: .2s; }
+    .dot-anim:nth-child(3) { animation-delay: .4s; }
+    @keyframes bounce { 0%,80%,100% { transform: scale(.6); opacity: .4; } 40% { transform: scale(1); opacity: 1; } }
+
+    /* ── Players list ── */
+    .players-list { list-style: none; }
+    .player-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 12px;
+      border-bottom: 1px solid rgba(240,192,64,.08);
+      font-size: 14px;
+    }
+    .player-item:last-child { border-bottom: none; }
+
+    /* ── Team badge ── */
+    .team-badge {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      padding: 2px 8px;
+      border-radius: 10px;
+      text-transform: uppercase;
+    }
+    .badge-branco  { background: rgba(245,245,245,.15); color: #f5f5f5; border: 1px solid rgba(245,245,245,.4); }
+    .badge-amarelo { background: rgba(240,192,64,.2);   color: #f0c040; border: 1px solid rgba(240,192,64,.5); }
+    .badge-azul    { background: rgba(58,123,213,.2);   color: #7aadff; border: 1px solid rgba(58,123,213,.5); }
+    .badge-verde   { background: rgba(46,204,113,.15);  color: #5eff9a; border: 1px solid rgba(46,204,113,.4); }
+    .badge-master  { background: rgba(240,192,64,.2);   color: var(--gold); border: 1px solid rgba(240,192,64,.5); }
+
+    /* ── Connection bar ── */
+    #conn-bar { text-align: right; margin-bottom: 10px; }
+    .conn-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #5fff5f; margin-right: 6px; vertical-align: middle; }
+    .conn-dot.off { background: #ff6060; }
+    .conn-label { font-family: 'Barlow Condensed', sans-serif; font-size: 11px; letter-spacing: 1px; color: var(--muted); text-transform: uppercase; }
+
+    /* ── Status bar ── */
+    .status-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 14px;
+      background: rgba(0,0,0,.4);
+      border: 1px solid rgba(240,192,64,.2);
+      border-radius: 7px;
+      margin-bottom: 10px;
+      font-size: 12px;
+      font-family: 'Barlow Condensed', sans-serif;
+      letter-spacing: 1px;
+      flex-wrap: wrap;
+      gap: 6px;
+      text-transform: uppercase;
+    }
+    .gold { color: var(--gold); }
+
+    /* ── Progress bar ── */
+    .progress-bar {
+      background: rgba(0,0,0,.4);
+      border: 1px solid rgba(240,192,64,.25);
+      border-radius: 20px;
+      height: 26px;
+      overflow: hidden;
+      margin-bottom: 10px;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--gold2), var(--gold));
+      border-radius: 20px;
+      transition: width .4s ease;
+      display: flex;
+      align-items: center;
+      padding-left: 12px;
+      min-width: 0;
+    }
+    .progress-text {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--navy);
+      letter-spacing: 1px;
+      white-space: nowrap;
+    }
+
+    .hint { text-align: center; font-size: 13px; color: var(--muted); margin: 6px 0 10px; font-style: italic; }
+
+    /* ── Game image ── */
+    .img-wrap {
+      position: relative;
+      border: 2px solid rgba(240,192,64,.3);
+      border-radius: 8px;
+      overflow: hidden;
+      background: #000;
+      user-select: none;
+    }
+    .img-wrap img {
+      width: 100%;
+      height: auto;
+      display: block;
+      pointer-events: none;
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+    #img-game { cursor: crosshair; }
+
+    /* ── Click markers ── */
+    .marker {
+      position: absolute;
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      border: 2.5px solid #ffeb3b;
+      background: rgba(255,235,59,.15);
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 800;
+      color: #ffeb3b;
+      animation: pop .3s ease-out;
+    }
+    .marker.ok {
+      border-color: #5fff5f;
+      background: rgba(95,255,95,.18);
+      color: #5fff5f;
+      animation: pop .3s ease-out, pulse-ok 1s ease-in-out 0.3s 2;
+    }
+    @keyframes pop {
+      from { transform: translate(-50%,-50%) scale(.3); opacity: 0; }
+      to   { transform: translate(-50%,-50%) scale(1);  opacity: 1; }
+    }
+    @keyframes pulse-ok {
+      0%,100% { box-shadow: 0 0 0 0 rgba(95,255,95,.4); }
+      50%      { box-shadow: 0 0 0 10px rgba(95,255,95,0); }
+    }
+
+    /* ── Penalty bar ── */
+    #penalty-bar { display: none; margin-bottom: 10px; }
+    .penalty-wrap {
+      background: rgba(180,30,30,.15);
+      border: 1px solid rgba(255,80,80,.35);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    #penalty-fill { height: 6px; background: linear-gradient(90deg, #8b0000, #ff4444); width: 100%; transition: width .1s linear; }
+    #penalty-text {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 12px;
+      color: #ff8080;
+      letter-spacing: 1px;
+      text-align: center;
+      margin-top: 5px;
+      text-transform: uppercase;
+    }
+
+    /* ── Scoreboard ── */
+    .score-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 9px 12px;
+      border-bottom: 1px solid rgba(240,192,64,.08);
+      font-size: 14px;
+    }
+    .score-item:last-child { border-bottom: none; }
+    .score-count  { color: var(--gold); font-weight: 700; font-family: 'Barlow Condensed', sans-serif; font-size: 16px; }
+    .score-clicks { color: rgba(240,192,64,.45); font-size: 11px; margin-left: 6px; }
+
+    /* ── Master tabs ── */
+    .tabs { display: flex; gap: 2px; border-bottom: 1px solid rgba(240,192,64,.2); margin-bottom: 14px; }
+    .tab-btn {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 12px;
+      letter-spacing: 1px;
+      padding: 8px 14px;
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      color: rgba(240,192,64,.4);
+      cursor: pointer;
+      transition: all .2s;
+      margin-bottom: -1px;
+      text-transform: uppercase;
+    }
+    .tab-btn.active, .tab-btn:hover { color: var(--gold); }
+    .tab-btn.active { border-bottom-color: var(--gold); }
+    .tab-pane { display: none; }
+    .tab-pane.active { display: block; }
+
+    .click-row { padding: 8px 10px; border-bottom: 1px solid rgba(240,192,64,.08); font-size: 12px; }
+    .click-row:last-child { border-bottom: none; }
+    .ok-dot  { color: #5fff5f; margin-right: 4px; }
+    .err-dot { color: #ff6060; margin-right: 4px; }
+
+    /* Master panel */
+    .master-panel {
+      background: rgba(240,192,64,.04);
+      border: 1px solid rgba(240,192,64,.2);
+      border-radius: 8px;
+      padding: 16px;
+      margin-top: 16px;
+    }
+    .master-btns { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+    .master-btns .btn { flex: 1; margin-top: 0; min-width: 140px; }
+
+    /* ── Finished banner ── */
+    .finished-banner {
+      text-align: center;
+      padding: 14px;
+      background: rgba(240,192,64,.05);
+      border: 1px solid rgba(240,192,64,.3);
+      border-radius: 7px;
+      margin-bottom: 12px;
+    }
+
+    /* ── VAR Overlay (countdown) ── */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.95);
+      z-index: 200;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 24px;
+    }
+    .overlay.show { display: flex; }
+
+    /* ── Fireworks ── */
+    .fireworks { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+    .spark {
+      position: absolute;
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      animation: spark var(--dur,1.5s) ease-out var(--delay,0s) infinite;
+    }
+    @keyframes spark {
+      0%   { transform: translate(0,0) scale(1); opacity: 1; }
+      100% { transform: translate(var(--dx),var(--dy)) scale(0); opacity: 0; }
+    }
+
+    /* ── Winner text ── */
+    .w-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: clamp(28px, 6vw, 50px);
+      font-weight: 900;
+      color: var(--gold);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      animation: glow 1.5s ease-in-out infinite alternate;
+      margin-bottom: 6px;
+    }
+    @keyframes glow {
+      from { text-shadow: 0 0 16px rgba(240,192,64,.4); }
+      to   { text-shadow: 0 0 40px rgba(240,192,64,1), 0 0 80px rgba(240,192,64,.35); }
+    }
+    .w-sub  { font-family: 'Barlow Condensed', sans-serif; font-size: 14px; color: var(--muted); letter-spacing: 3px; margin-bottom: 14px; text-transform: uppercase; }
+    .w-name { font-family: 'Barlow Condensed', sans-serif; font-size: clamp(22px, 5vw, 36px); font-weight: 900; color: #fff; margin: 14px 0 6px; text-transform: uppercase; }
+    .w-team { font-size: 17px; margin-bottom: 16px; font-family: 'Barlow Condensed', sans-serif; letter-spacing: 2px; font-weight: 700; text-transform: uppercase; }
+
+    /* ── Roster editor (Master) ── */
+    .roster-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    @media(max-width: 600px) { .roster-grid { grid-template-columns: 1fr; } }
+    .roster-card {
+      border: 1px solid rgba(240,192,64,.2);
+      border-radius: 8px;
+      padding: 12px;
+    }
+    .roster-card-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .roster-dot {
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .roster-member {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 5px 8px;
+      border-radius: 5px;
+      font-size: 13px;
+      margin-bottom: 4px;
+      background: rgba(0,0,0,.2);
+    }
+    .roster-remove {
+      background: none;
+      border: none;
+      color: rgba(255,100,100,.6);
+      cursor: pointer;
+      font-size: 14px;
+      line-height: 1;
+      padding: 0 2px;
+    }
+    .roster-remove:hover { color: #ff6060; }
+    .roster-input-row {
+      display: flex;
+      gap: 6px;
+      margin-top: 6px;
+    }
+    .roster-input-row input {
+      flex: 1;
+      padding: 6px 10px;
+      font-size: 13px;
+    }
+    .roster-add-btn {
+      background: rgba(240,192,64,.2);
+      border: 1px solid rgba(240,192,64,.4);
+      border-radius: 5px;
+      color: var(--gold);
+      cursor: pointer;
+      padding: 6px 12px;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      transition: all .2s;
+      white-space: nowrap;
+    }
+    .roster-add-btn:hover { background: rgba(240,192,64,.3); }
+
+    /* Team color borders on roster cards */
+    .roster-card[data-t="branco"]  { border-color: rgba(245,245,245,.35); }
+    .roster-card[data-t="amarelo"] { border-color: rgba(240,192,64,.4); }
+    .roster-card[data-t="azul"]    { border-color: rgba(58,123,213,.4); }
+    .roster-card[data-t="verde"]   { border-color: rgba(46,204,113,.35); }
+
+    /* ── Pending overlay ── */
+    @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+
+    /* ── Spectator progress ── */
+    .spec-progress-item { margin-bottom: 12px; }
+    .spec-prog-label {
+      display: flex;
+      justify-content: space-between;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 12px;
+      letter-spacing: 1px;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+    }
+    .spec-prog-bar { height: 8px; background: rgba(255,255,255,.1); border-radius: 10px; overflow: hidden; }
+    .spec-prog-fill { height: 100%; border-radius: 10px; transition: width .4s; }
+
+    /* ── Gabarito side by side (master) ── */
+    .images-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; }
+    @media(max-width: 600px) { .images-grid { grid-template-columns: 1fr; } }
+    .img-label {
+      position: absolute;
+      top: 6px; left: 6px;
+      background: rgba(0,0,0,.8);
+      color: var(--gold);
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 10px;
+      letter-spacing: 1px;
+      padding: 3px 8px;
+      border-radius: 4px;
+      border: 1px solid rgba(240,192,64,.3);
+      text-transform: uppercase;
+    }
+
+    /* Kick button */
+    .kick-btn {
+      background: none;
+      border: none;
+      color: rgba(255,100,100,.5);
+      cursor: pointer;
+      font-size: 13px;
+      margin-left: auto;
+    }
+    .kick-btn:hover { color: #ff6060; }
+  </style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ── CONNECTION BAR ── -->
+  <div id="conn-bar" style="display:none;">
+    <span class="conn-dot" id="conn-dot"></span>
+    <span class="conn-label" id="conn-label">Conectando...</span>
+  </div>
+
+  <!-- ══ PAGE: LOGIN ══ -->
+  <div id="page-login" class="page active">
+    <div class="header">
+      <div class="header-badge">⚽ Copa CX SIEG — Campeonato Interno</div>
+      <div class="header-title">VAR da <span>Qualidade</span></div>
+      <div class="header-sub">Encontre os 7 erros — Dinâmica de Times</div>
+    </div>
+
+    <div class="card">
+      <div class="mode-toggle">
+        <button class="mode-btn active" id="mode-player" onclick="setLoginMode('player')">⚽ Jogador</button>
+        <button class="mode-btn" id="mode-spectator" onclick="setLoginMode('spectator')">👁 Espectador</button>
+      </div>
+
+      <!-- Player fields -->
+      <div id="player-fields">
+        <label>Seu Nome</label>
+        <input type="text" id="inp-name" placeholder="Seu nome..." maxlength="30" />
+
+        <label>Seu Time</label>
+        <div class="team-grid">
+          <button class="team-btn" data-team="branco"  onclick="pickTeam(this)"><span class="dot dot-branco"></span>  Time Branco</button>
+          <button class="team-btn" data-team="amarelo" onclick="pickTeam(this)"><span class="dot dot-amarelo"></span> Time Amarelo</button>
+          <button class="team-btn" data-team="azul"    onclick="pickTeam(this)"><span class="dot dot-azul"></span>   Time Azul</button>
+          <button class="team-btn" data-team="verde"   onclick="pickTeam(this)"><span class="dot dot-verde"></span>  Time Verde</button>
+        </div>
+
+        <label>Senha Master <span style="font-size:10px;opacity:.6;font-family:'Barlow',sans-serif;text-transform:none;">(deixe vazio se for jogador)</span></label>
+        <input type="password" id="inp-mpw" placeholder="Somente o Master conhece..." oninput="onMasterPwInput(this.value)" />
+      </div>
+
+      <!-- Spectator fields -->
+      <div id="spectator-fields" style="display:none;">
+        <p style="font-size:14px;color:var(--muted);margin-bottom:12px;text-align:center;font-style:italic;">
+          Você assistirá ao jogo sem interferir nos resultados.
+        </p>
+        <label>Código de Espectador</label>
+        <input type="password" id="inp-spw" placeholder="Código fornecido pelo organizador..." />
+      </div>
+
+      <label>Código da Sala</label>
+      <input type="text" id="inp-room" placeholder="Ex: SIEG01" maxlength="20" oninput="this.value=this.value.toUpperCase()" />
+
+      <div class="error-msg" id="login-err"></div>
+      <button class="btn btn-gold" onclick="doLogin()">⚽ ENTRAR NO JOGO ⚽</button>
+    </div>
+    <p class="hint">Os olhos mais atentos vencem — boa sorte!</p>
+  </div>
+
+  <!-- ══ PAGE: WAITING ROOM ══ -->
+  <div id="page-waiting" class="page">
+    <div class="header">
+      <div class="header-badge">⚽ Copa CX SIEG</div>
+      <div class="header-title" style="font-size:clamp(20px,5vw,36px);">Sala de Espera</div>
+      <div class="header-sub" id="wait-sub">Aguardando o Master iniciar o jogo...</div>
+    </div>
+
+    <div class="card">
+      <div class="sec-title" id="wait-room-label">Sala: —</div>
+      <div class="dots"><div class="dot-anim"></div><div class="dot-anim"></div><div class="dot-anim"></div></div>
+      <p style="font-size:13px;color:var(--muted);text-align:center;font-style:italic;" id="wait-spell">Aguardando o sinal de início...</p>
+      <ul class="players-list" id="players-list"></ul>
+      <div style="text-align:center;margin-top:14px;">
+        <button class="btn-outline btn" style="width:auto;font-size:11px;padding:6px 16px;margin-top:0;" onclick="sair()">Sair da sala</button>
+      </div>
+    </div>
+
+    <!-- Master controls -->
+    <div id="master-wait" style="display:none;">
+      <div class="card">
+        <div class="sec-title">🎛️ Painel do Master</div>
+
+        <!-- Roster editor -->
+        <p style="font-size:13px;color:var(--muted);margin-bottom:14px;">
+          Configure os membros de cada time antes de iniciar. Os jogadores verão o time deles na sala de espera.
+        </p>
+        <div class="roster-grid" id="roster-editor"></div>
+
+        <button class="btn btn-gold" style="margin-top:16px;" onclick="saveRosters()">💾 SALVAR TIMES</button>
+        <div id="roster-saved" style="display:none;color:#5fff5f;font-size:12px;text-align:center;margin-top:8px;font-family:'Barlow Condensed',sans-serif;letter-spacing:1px;">✓ TIMES SALVOS</div>
+
+        <hr style="border-color:rgba(240,192,64,.1);margin:18px 0;" />
+        <button class="btn btn-green" onclick="masterStart()">▶ INICIAR O DESAFIO</button>
+        <div style="text-align:center;margin-top:12px;">
+          <button class="btn-outline btn" style="width:auto;font-size:11px;padding:6px 16px;margin-top:0;" onclick="sair()">Sair da sala</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ PAGE: SPECTATOR ══ -->
+  <div id="page-spectator" class="page">
+    <div class="header">
+      <div class="header-badge">👁 Modo Espectador</div>
+      <div class="header-title" style="font-size:clamp(18px,4vw,30px);">VAR da <span>Qualidade</span></div>
+      <div class="header-sub" id="spec-status">Aguardando início...</div>
+    </div>
+
+    <div id="spec-waiting" class="card">
+      <div class="sec-title">Participantes na Sala</div>
+      <ul class="players-list" id="spec-players-list"></ul>
+      <div class="dots" style="margin-top:14px;"><div class="dot-anim"></div><div class="dot-anim"></div><div class="dot-anim"></div></div>
+      <p style="text-align:center;font-style:italic;font-size:13px;color:var(--muted);">Aguardando o Master iniciar o desafio...</p>
+    </div>
+
+    <div id="spec-playing" style="display:none;">
+      <div class="card">
+        <div class="sec-title">🏆 Placar ao Vivo</div>
+        <div id="spec-scoreboard"></div>
+      </div>
+      <div class="card" style="margin-top:12px;">
+        <div class="sec-title">📊 Progresso por Jogador</div>
+        <div id="spec-progress-bars"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ PAGE: GAME ══ -->
+  <div id="page-game" class="page">
+    <div class="status-bar">
+      <span id="g-player">—</span>
+      <span class="gold" id="g-clicks">Cliques: 0</span>
+      <span id="g-found">Encontrados: 0/7</span>
+    </div>
+
+    <div class="progress-bar">
+      <div class="progress-fill" id="prog-fill" style="width:0%">
+        <span class="progress-text" id="prog-text">0 / 7</span>
+      </div>
+    </div>
+
+    <!-- Penalty bar -->
+    <div id="penalty-bar">
+      <div class="penalty-wrap">
+        <div id="penalty-fill"></div>
+      </div>
+      <p id="penalty-text"></p>
+    </div>
+
+    <!-- PLAYER: imagem B (lado direito) para clicar -->
+    <div id="player-game-area">
+      <p class="hint">⬇ Clique nas diferenças na IMAGEM B</p>
+      <div class="img-wrap" id="img-game" onclick="handleClick(event)">
+        <div class="img-label">IMAGEM B — Encontre os erros</div>
+        <img src="/images/modified.webp" alt="Imagem do jogo" id="game-img" />
+      </div>
+    </div>
+
+    <!-- MASTER: gabarito lado a lado -->
+    <div id="master-game-area" style="display:none;">
+      <p class="hint">Gabarito visível somente para você, Master</p>
+      <div class="images-grid">
+        <div class="img-wrap">
+          <div class="img-label">Gabarito</div>
+          <img id="gabarito-img" src="" alt="Gabarito" />
+        </div>
+        <div class="img-wrap">
+          <div class="img-label">Imagem do Jogo</div>
+          <img src="/images/modified.webp" alt="Jogo" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Banner: você terminou — aguardando os demais finalistas -->
+    <div class="finished-banner" id="g-finished" style="display:none;margin-top:14px;">
+      <div style="font-size:28px;margin-bottom:6px;">⚽</div>
+      <p style="font-family:'Barlow Condensed',sans-serif;color:var(--gold);font-size:16px;font-weight:700;letter-spacing:1px;text-transform:uppercase;" id="g-finished-place">Você encontrou todos os erros!</p>
+      <p style="font-size:13px;color:var(--muted);margin-top:6px;font-style:italic;">Aguarde — o jogo encerra assim que os 3 primeiros terminarem.</p>
+    </div>
+
+    <!-- Banner: contagem de finalistas (visível para quem ainda está jogando) -->
+    <div class="finished-banner" id="g-pending" style="display:none;margin-top:14px;border-color:rgba(255,200,50,.4);">
+      <div style="font-size:28px;margin-bottom:6px;">🔍</div>
+      <p style="font-family:'Barlow Condensed',sans-serif;color:var(--gold);font-size:16px;font-weight:700;letter-spacing:1px;text-transform:uppercase;" id="g-pending-text">1 de 3 já terminou!</p>
+      <p style="font-size:13px;color:var(--muted);margin-top:6px;font-style:italic;">Corra — quando o 3º terminar, o jogo encerra para todos!</p>
+    </div>
+
+    <!-- Master panel -->
+    <div id="master-game" style="display:none;">
+      <div class="master-panel">
+        <div class="tabs">
+          <button class="tab-btn active" onclick="showTab('tab-score')">📊 Placar</button>
+          <button class="tab-btn"        onclick="showTab('tab-clicks')">🖱️ Cliques</button>
+          <button class="tab-btn"        onclick="showTab('tab-times')">👥 Times</button>
+        </div>
+
+        <div id="tab-score" class="tab-pane active">
+          <div class="sec-title">Classificação em Tempo Real</div>
+          <div id="finishers-preview" style="display:none;margin-bottom:14px;"></div>
+          <div id="scoreboard"></div>
+        </div>
+        <div id="tab-clicks" class="tab-pane">
+          <div class="sec-title">Histórico por Jogador</div>
+          <div id="click-log"></div>
+        </div>
+        <div id="tab-times" class="tab-pane">
+          <div class="sec-title">Membros por Time</div>
+          <div id="master-rosters"></div>
+        </div>
+
+        <div class="master-btns">
+          <div id="master-winner-preview" style="display:none;width:100%;background:rgba(240,192,64,.08);border:1px solid rgba(240,192,64,.4);border-radius:7px;padding:12px 14px;margin-bottom:4px;"></div>
+          <button class="btn btn-green" id="btn-announce" onclick="masterAnnounce()">🏁 ENCERRAR AGORA (manual)</button>
+          <button class="btn btn-red" onclick="masterReset()">🔄 REINICIAR JOGO</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ OVERLAY: Countdown VAR ══ -->
+  <div class="overlay" id="start-overlay" style="background:rgba(0,0,0,.97);">
+    <div style="position:relative;z-index:2;text-align:center;padding:24px;">
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:4px;color:var(--muted);margin-bottom:20px;text-transform:uppercase;">VAR — Análise em andamento</div>
+      <div id="start-countdown" style="font-family:'Barlow Condensed',sans-serif;font-size:clamp(80px,18vw,130px);font-weight:900;color:var(--gold);text-shadow:0 0 40px rgba(240,192,64,.8);animation:glow 0.8s ease-in-out infinite alternate;line-height:1;">3</div>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:16px;letter-spacing:3px;color:var(--text);margin-top:16px;opacity:.8;text-transform:uppercase;" id="start-msg">Encontre os 7 erros!</div>
+    </div>
+  </div>
+
+  <!-- ══ OVERLAY: Ranking final ══ -->
+  <div class="overlay" id="ranking-overlay" style="background:rgba(0,0,0,.96);overflow-y:auto;">
+    <div style="position:relative;z-index:2;width:100%;max-width:600px;padding:28px 20px;text-align:center;">
+      <div class="w-title" style="font-size:clamp(22px,5vw,36px);margin-bottom:4px;">⚽ CLASSIFICAÇÃO FINAL ⚽</div>
+      <p style="font-family:'Barlow Condensed',sans-serif;font-size:13px;color:var(--muted);margin-bottom:24px;letter-spacing:2px;text-transform:uppercase;">Copa CX SIEG — VAR da Qualidade</p>
+      <div id="final-ranking"></div>
+      <p style="font-family:'Barlow Condensed',sans-serif;font-size:11px;color:rgba(240,192,64,.35);letter-spacing:2px;margin-top:24px;text-transform:uppercase;">Aguardando o Master reiniciar o jogo...</p>
+    </div>
+  </div>
+
+  <!-- ══ OVERLAY: Winner ══ -->
+  <div class="overlay" id="overlay">
+    <div class="fireworks" id="fw"></div>
+    <div style="position:relative;z-index:2;text-align:center;">
+      <div class="w-title">⚽ GOOOL! ⚽</div>
+      <div class="w-sub">O campeão do VAR da Qualidade é</div>
+      <div class="w-name" id="w-name">—</div>
+      <div class="w-team" id="w-team">—</div>
+      <p style="font-size:14px;color:var(--muted);font-style:italic;max-width:380px;line-height:1.6;" id="w-stats"></p>
+      <div style="margin-top:24px;font-family:'Barlow Condensed',sans-serif;font-size:13px;color:rgba(240,192,64,.4);letter-spacing:2px;text-transform:uppercase;">⚽ Copa CX SIEG ⚽</div>
+    </div>
+  </div>
+
+</div><!-- /wrap -->
+
+<style>
+@keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+</style>
+
+<script>
+// ── State ─────────────────────────────────────────────────────────────────────
+let ws, reconnectTimer;
+let myId, myName, myTeam, myRoomId;
+let isMaster = false, isSpectator = false;
+let selectedTeam = '';
+let loginMode = 'player';
+let totalErrors = 7;
+let found = [];
+let totalClicks = 0;
+let penaltyTimer = null;
+let pendingDotsTimer = null;
+let gabaritoToken = null;
+let teamRosters = { branco: [], amarelo: [], azul: [], verde: [] };
+
+const TEAM_COLORS = {
+  branco:  '#f5f5f5',
+  amarelo: '#f0c040',
+  azul:    '#3a7bd5',
+  verde:   '#2ecc71',
+};
+const TEAM_LABELS = {
+  branco: 'Time Branco',
+  amarelo: 'Time Amarelo',
+  azul: 'Time Azul',
+  verde: 'Time Verde',
+};
+
+// ── Page helpers ──────────────────────────────────────────────────────────────
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function setLoginMode(mode) {
+  loginMode = mode;
+  document.getElementById('player-fields').style.display    = mode === 'player' ? '' : 'none';
+  document.getElementById('spectator-fields').style.display = mode === 'spectator' ? '' : 'none';
+  document.getElementById('mode-player').classList.toggle('active', mode === 'player');
+  document.getElementById('mode-spectator').classList.toggle('active', mode === 'spectator');
+}
+
+function pickTeam(btn) {
+  document.querySelectorAll('.team-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  selectedTeam = btn.dataset.team;
+}
+
+function onMasterPwInput(val) {
+  // When master password is typed, hide the team section
+  const teamSection = document.querySelector('.team-grid').parentElement;
+  // keep it visible — master might also select a team to appear in ranking
+}
+
+function sair() { localStorage.removeItem('cx_var_session'); location.reload(); }
+
+function showTab(id) {
+  document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.target.classList.add('active');
+}
+
+// ── Team badge HTML ───────────────────────────────────────────────────────────
+function teamBadge(team) {
+  if (!team) return '<span class="team-badge badge-master">Master</span>';
+  return `<span class="team-badge badge-${team}">${TEAM_LABELS[team] || team}</span>`;
+}
+function teamDot(team, size = 10) {
+  const c = TEAM_COLORS[team] || '#888';
+  return `<span style="display:inline-block;width:${size}px;height:${size}px;border-radius:50%;background:${c};flex-shrink:0;"></span>`;
+}
+
+// ── WebSocket connection ──────────────────────────────────────────────────────
+function connect(onOpen) {
+  const proto = location.protocol === 'https:' ? 'wss' : 'ws';
+  ws = new WebSocket(`${proto}://${location.host}`);
+
+  ws.onopen = () => {
+    updateConn(true);
+    clearTimeout(reconnectTimer);
+    if (onOpen) onOpen();
+  };
+
+  ws.onclose = () => {
+    updateConn(false);
+    reconnectTimer = setTimeout(() => connect(() => {
+      const s = JSON.parse(localStorage.getItem('cx_var_session') || 'null');
+      if (s) ws.send(JSON.stringify({ type: 'join', ...s }));
+    }), 3000);
+  };
+
+  ws.onmessage = (e) => handleMessage(JSON.parse(e.data));
+}
+
+function updateConn(ok) {
+  document.getElementById('conn-bar').style.display = '';
+  document.getElementById('conn-dot').className = 'conn-dot' + (ok ? '' : ' off');
+  document.getElementById('conn-label').textContent = ok ? 'Conectado' : 'Reconectando...';
+}
+
+// ── Login ─────────────────────────────────────────────────────────────────────
+function doLogin() {
+  const name   = document.getElementById('inp-name').value.trim();
+  const mpw    = document.getElementById('inp-mpw').value.trim();
+  const spw    = document.getElementById('inp-spw').value.trim();
+  const roomId = document.getElementById('inp-room').value.trim().toUpperCase();
+  const errEl  = document.getElementById('login-err');
+  errEl.textContent = '';
+
+  if (loginMode === 'spectator') {
+    if (!spw)    { errEl.textContent = 'Digite o código de espectador.'; return; }
+    if (!roomId) { errEl.textContent = 'Digite o código da sala.'; return; }
+  } else {
+    if (!name)           { errEl.textContent = 'Digite seu nome.'; return; }
+    if (!selectedTeam && !mpw) { errEl.textContent = 'Selecione seu time.'; return; }
+    if (!roomId)         { errEl.textContent = 'Digite o código da sala.'; return; }
+  }
+
+  const payload = {
+    type: 'join',
+    name: loginMode === 'spectator' ? 'Espectador' : name,
+    team: selectedTeam || 'branco',
+    roomId,
+    masterPassword: mpw || undefined,
+    spectatorPassword: loginMode === 'spectator' ? spw : undefined,
+  };
+
+  localStorage.setItem('cx_var_session', JSON.stringify({
+    name: payload.name, team: payload.team, roomId,
+    masterPassword: payload.masterPassword,
+    spectatorPassword: payload.spectatorPassword,
+  }));
+
+  connect(() => ws.send(JSON.stringify(payload)));
+}
+
+// ── Message handler ───────────────────────────────────────────────────────────
+function handleMessage(msg) {
+  switch (msg.type) {
+
+    case 'error':
+      document.getElementById('login-err').textContent = msg.text;
+      break;
+
+    case 'joined':
+      myId        = msg.playerId;
+      isMaster    = msg.isMaster;
+      isSpectator = msg.isSpectator;
+      myRoomId    = msg.roomId;
+      totalErrors = msg.totalErrors || 7;
+      gabaritoToken = msg.gabaritoToken;
+      const s = JSON.parse(localStorage.getItem('cx_var_session') || '{}');
+      myName = s.name; myTeam = s.team;
+      updateFoundDisplay();
+      if (isSpectator) { showPage('page-spectator'); }
+      else             { showPage('page-waiting'); }
+      document.getElementById('wait-room-label').textContent = `Sala: ${myRoomId}`;
+      if (isMaster) {
+        document.getElementById('master-wait').style.display = '';
+        document.getElementById('wait-sub').textContent = 'Você é o Master desta sala.';
+        buildRosterEditor();
+        if (gabaritoToken) {
+          document.getElementById('gabarito-img').src = `/images/gabarito.png?t=${gabaritoToken}`;
+        }
+      }
+      break;
+
+    case 'room_state':
+      teamRosters = msg.teamRosters || teamRosters;
+      renderWaitingPlayers(msg.players);
+      if (msg.gameStatus === 'playing') enterGame();
+      if (isMaster) renderScoreboard(msg.players, msg);
+      break;
+
+    case 'rosters_updated':
+      teamRosters = msg.teamRosters || teamRosters;
+      renderRosterEditor();
+      renderMasterRosters();
+      break;
+
+    case 'spectator_state':
+      teamRosters = msg.teamRosters || teamRosters;
+      renderSpectatorState(msg);
+      break;
+
+    case 'rosters_updated':
+      teamRosters = msg.teamRosters;
+      renderRosterEditor();
+      break;
+
+    case 'game_started':
+      enterGame();
+      break;
+
+    case 'click_result':
+      handleClickResult(msg);
+      break;
+
+    case 'locked':
+      startPenalty(msg.remaining);
+      break;
+
+    case 'you_finished':
+      // Este jogador encontrou os 7 erros — aguarda os demais finalistas
+      showFinishedBanner(msg.place);
+      break;
+
+    case 'finisher_update':
+      // Avisa os jogadores que ainda jogam quantos já terminaram (sem revelar quem)
+      if (!isMaster && !isSpectator && found.length < totalErrors) {
+        showFinisherProgress(msg.count, msg.needed);
+      }
+      break;
+
+    case 'finishers_update':
+      // Master vê o ranking parcial de quem já terminou, em tempo real
+      if (isMaster) renderMasterFinishers(msg.finishers);
+      break;
+
+    case 'winner_announced':
+      showWinnerOverlay(msg.winner);
+      setTimeout(() => showRanking(msg.players), 4500);
+      break;
+
+    case 'game_reset':
+      resetGameState();
+      showPage('page-waiting');
+      break;
+
+    case 'kicked':
+      localStorage.removeItem('cx_var_session');
+      alert('Você foi removido da sala pelo Master.');
+      location.reload();
+      break;
+  }
+}
+
+// ── Game entry ────────────────────────────────────────────────────────────────
+function enterGame() {
+  showPage('page-game');
+  if (isMaster) {
+    document.getElementById('master-game-area').style.display = '';
+    document.getElementById('player-game-area').style.display = 'none';
+    document.getElementById('master-game').style.display = '';
+  } else {
+    document.getElementById('g-player').textContent = `${myName} · ${TEAM_LABELS[myTeam] || myTeam}`;
+    startCountdown();
+  }
+}
+
+function startCountdown() {
+  const overlay = document.getElementById('start-overlay');
+  const num     = document.getElementById('start-countdown');
+  overlay.classList.add('show');
+  let n = 3;
+  num.textContent = n;
+  const t = setInterval(() => {
+    n--;
+    if (n > 0) { num.textContent = n; }
+    else {
+      clearInterval(t);
+      num.textContent = '⚽';
+      document.getElementById('start-msg').textContent = 'VAR LIBERADO — ENCONTRE OS 7 ERROS!';
+      setTimeout(() => overlay.classList.remove('show'), 1200);
+    }
+  }, 900);
+}
+
+// ── Click handling ────────────────────────────────────────────────────────────
+function handleClick(e) {
+  if (isMaster) return;
+  if (found.length >= totalErrors) return; // já terminou — aguardando os demais
+  const wrap = document.getElementById('img-game');
+  const rect = wrap.getBoundingClientRect();
+  const x = (e.clientX - rect.left) / rect.width;
+  const y = (e.clientY - rect.top)  / rect.height;
+  if (ws && ws.readyState === WebSocket.OPEN) ws.send(JSON.stringify({ type: 'click', x, y }));
+}
+
+function handleClickResult(msg) {
+  totalClicks = msg.totalClicks;
+  document.getElementById('g-clicks').textContent = `Cliques: ${totalClicks}`;
+
+  if (msg.correct) {
+    found = msg.found;
+    updateFoundDisplay();
+    placeMarker(msg.x, msg.y, true, found.length);
+  } else {
+    placeMarker(msg.x, msg.y, false, null);
+    if (msg.penaltyMs > 0) startPenalty(msg.penaltyMs);
+  }
+}
+
+function updateFoundDisplay() {
+  const n = found.length;
+  document.getElementById('g-found').textContent = `Encontrados: ${n}/${totalErrors}`;
+  const pct = totalErrors > 0 ? (n / totalErrors * 100) : 0;
+  document.getElementById('prog-fill').style.width = pct + '%';
+  document.getElementById('prog-text').textContent = `${n} / ${totalErrors}`;
+}
+
+function placeMarker(xPct, yPct, ok, num) {
+  const wrap = document.getElementById('img-game');
+  const m = document.createElement('div');
+  m.className = 'marker' + (ok ? ' ok' : '');
+  m.style.left = (xPct * 100) + '%';
+  m.style.top  = (yPct * 100) + '%';
+  m.textContent = ok ? (num || '✓') : '✗';
+  wrap.appendChild(m);
+  if (!ok) setTimeout(() => m.remove(), 1500);
+}
+
+// ── Penalty ───────────────────────────────────────────────────────────────────
+function startPenalty(ms) {
+  if (penaltyTimer) clearInterval(penaltyTimer);
+  const bar  = document.getElementById('penalty-bar');
+  const fill = document.getElementById('penalty-fill');
+  const txt  = document.getElementById('penalty-text');
+  bar.style.display = '';
+  const end = Date.now() + ms;
+  penaltyTimer = setInterval(() => {
+    const rem = end - Date.now();
+    if (rem <= 0) {
+      clearInterval(penaltyTimer);
+      bar.style.display = 'none';
+      return;
+    }
+    fill.style.width = (rem / ms * 100) + '%';
+    txt.textContent = `⛔ Penalidade: aguarde ${(rem/1000).toFixed(1)}s`;
+  }, 100);
+}
+
+// ── Fluxo de finalização (top 3) ───────────────────────────────────────────────
+function showFinishedBanner(place) {
+  document.getElementById('g-pending').style.display = 'none';
+  const banner = document.getElementById('g-finished');
+  banner.style.display = '';
+  const ordinals = { 1: '1º', 2: '2º', 3: '3º' };
+  document.getElementById('g-finished-place').textContent =
+    `Você terminou em ${ordinals[place] || place + 'º'} lugar!`;
+}
+
+function showFinisherProgress(count, needed) {
+  const banner = document.getElementById('g-pending');
+  banner.style.display = '';
+  document.getElementById('g-pending-text').textContent = `${count} de ${needed} já terminaram!`;
+}
+
+function renderMasterFinishers(finishers) {
+  const el = document.getElementById('finishers-preview');
+  if (!el) return;
+  if (!finishers || finishers.length === 0) { el.style.display = 'none'; return; }
+  el.style.display = '';
+  const medals = ['🥇','🥈','🥉'];
+  el.innerHTML = `
+    <div style="font-family:'Barlow Condensed',sans-serif;font-size:12px;color:var(--gold);letter-spacing:1px;margin-bottom:8px;text-transform:uppercase;">
+      🏁 Finalistas (${finishers.length}/3)
+    </div>` + finishers.map((f,i) => `
+      <div style="display:flex;align-items:center;gap:8px;padding:6px 10px;background:rgba(240,192,64,.06);border-radius:6px;margin-bottom:4px;">
+        <span style="font-size:16px;">${medals[i]||''}</span>
+        ${teamDot(f.team,10)}
+        <strong style="font-size:13px;">${f.name}</strong>
+        ${teamBadge(f.team)}
+        <span style="margin-left:auto;font-size:11px;color:var(--muted);">${f.totalClicks} cliques</span>
+      </div>`).join('');
+}
+
+// ── Winner overlay ────────────────────────────────────────────────────────────
+function showWinnerOverlay(winner) {
+  document.getElementById('w-name').textContent = winner.name;
+  const color = TEAM_COLORS[winner.team] || '#fff';
+  document.getElementById('w-team').innerHTML = `${teamDot(winner.team, 14)} <span style="color:${color};margin-left:6px;">${TEAM_LABELS[winner.team] || winner.team}</span>`;
+  document.getElementById('w-stats').textContent = `${winner.totalClicks} cliques · ${winner.totalWrong} erros`;
+  document.getElementById('overlay').classList.add('show');
+  spawnFireworks();
+}
+
+function showRanking(players) {
+  document.getElementById('overlay').classList.remove('show');
+  const container = document.getElementById('final-ranking');
+  const medals = ['🥇', '🥈', '🥉'];
+  container.innerHTML = players.map((p, i) => `
+    <div style="display:flex;align-items:center;gap:12px;padding:12px 16px;background:rgba(240,192,64,${i===0?.08:.04});border:1px solid rgba(240,192,64,${i===0?.3:.15});border-radius:8px;margin-bottom:10px;">
+      <div style="font-size:22px;width:32px;text-align:center;">${medals[i] || (i+1)}</div>
+      <div style="flex:1;text-align:left;">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:17px;font-weight:800;color:${i===0?'var(--gold)':'var(--text)'};text-transform:uppercase;">${p.name}</div>
+        <div style="display:flex;align-items:center;gap:6px;margin-top:2px;">${teamDot(p.team,8)} ${teamBadge(p.team)}</div>
+      </div>
+      <div style="text-align:right;">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:18px;font-weight:900;color:var(--gold);">${p.found}/${totalErrors}</div>
+        <div style="font-size:11px;color:var(--muted);font-family:'Barlow Condensed',sans-serif;letter-spacing:1px;">${p.totalClicks} cliques</div>
+      </div>
+    </div>`).join('');
+  document.getElementById('ranking-overlay').classList.add('show');
+}
+
+// ── Fireworks ─────────────────────────────────────────────────────────────────
+function spawnFireworks() {
+  const fw = document.getElementById('fw');
+  fw.innerHTML = '';
+  const colors = ['#f0c040','#ffffff','#3a7bd5','#2ecc71','#ff6b6b','#a855f7'];
+  for (let i = 0; i < 40; i++) {
+    const s = document.createElement('div');
+    s.className = 'spark';
+    const angle = Math.random() * Math.PI * 2;
+    const dist  = 100 + Math.random() * 250;
+    s.style.cssText = `
+      left:${20+Math.random()*60}%;top:${20+Math.random()*40}%;
+      background:${colors[Math.floor(Math.random()*colors.length)]};
+      --dx:${Math.cos(angle)*dist}px;--dy:${Math.sin(angle)*dist}px;
+      --dur:${1+Math.random()*1.5}s;--delay:${Math.random()*1}s;`;
+    fw.appendChild(s);
+  }
+}
+
+// ── Waiting room players ──────────────────────────────────────────────────────
+function renderWaitingPlayers(players) {
+  const ul = document.getElementById('players-list');
+  const regular = players.filter(p => !p.isMaster);
+  ul.innerHTML = regular.map(p => `
+    <li class="player-item">
+      ${teamDot(p.team, 10)}
+      <span>${p.name}</span>
+      ${teamBadge(p.team)}
+      ${isMaster ? `<button class="kick-btn" onclick="kickPlayer('${p.id}')" title="Remover">✕</button>` : ''}
+    </li>`).join('') || '<li class="player-item" style="color:var(--muted);font-style:italic;">Aguardando jogadores...</li>';
+}
+
+function kickPlayer(id) {
+  if (ws && ws.readyState === WebSocket.OPEN) ws.send(JSON.stringify({ type: 'kick_player', targetId: id }));
+}
+
+// ── Scoreboard (master) ───────────────────────────────────────────────────────
+function renderScoreboard(players, room) {
+  const sb = document.getElementById('scoreboard');
+  if (!sb) return;
+  const sorted = [...players].filter(p => !p.isMaster).sort((a,b) => b.found - a.found || a.totalClicks - b.totalClicks);
+  sb.innerHTML = sorted.map((p, i) => `
+    <div class="score-item">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span style="font-family:'Barlow Condensed',sans-serif;font-size:14px;color:var(--muted);width:20px;">${i+1}.</span>
+        ${teamDot(p.team, 10)}
+        <span>${p.name}</span>
+        ${teamBadge(p.team)}
+      </div>
+      <div>
+        <span class="score-count">${p.found}/${totalErrors}</span>
+        <span class="score-clicks">${p.totalClicks} cliques · ${p.totalWrong||0} erros</span>
+        ${p.lockedUntil > Date.now() ? '<span style="color:#ff8080;font-size:11px;margin-left:6px;">⛔</span>' : ''}
+      </div>
+    </div>`).join('') || '<div style="padding:12px;color:var(--muted);font-style:italic;">Sem jogadores ainda.</div>';
+
+  // Click log
+  const cl = document.getElementById('click-log');
+  if (!cl) return;
+  const withLogs = players.filter(p => !p.isMaster && p.clickLog && p.clickLog.length > 0);
+  cl.innerHTML = withLogs.map(p => `
+    <div style="margin-bottom:14px;">
+      <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px;">
+        ${teamDot(p.team,10)} <strong>${p.name}</strong> ${teamBadge(p.team)}
+      </div>
+      ${[...p.clickLog].reverse().slice(0,8).map(c => `
+        <div class="click-row">
+          <span class="${c.correct?'ok-dot':'err-dot'}">${c.correct?'✓':'✗'}</span>
+          x:${c.x.toFixed(3)} y:${c.y.toFixed(3)}
+          ${c.correct ? `<span style="color:#5fff5f;font-size:11px;"> — Erro #${c.errorIndex+1}</span>` : ''}
+        </div>`).join('')}
+    </div>`).join('') || '<div style="padding:12px;color:var(--muted);font-style:italic;">Nenhum clique ainda.</div>';
+
+  renderMasterRosters();
+}
+
+// ── Roster editor (Master, sala de espera) ────────────────────────────────────
+function buildRosterEditor() {
+  renderRosterEditor();
+}
+
+function renderRosterEditor() {
+  const container = document.getElementById('roster-editor');
+  if (!container) return;
+  const teams = ['branco', 'amarelo', 'azul', 'verde'];
+  container.innerHTML = teams.map(t => `
+    <div class="roster-card" data-t="${t}">
+      <div class="roster-card-title">
+        <span class="roster-dot" style="background:${TEAM_COLORS[t]};"></span>
+        ${TEAM_LABELS[t]}
+      </div>
+      <div id="roster-members-${t}">
+        ${(teamRosters[t]||[]).map(m => `
+          <div class="roster-member">
+            <span>${m}</span>
+            <button class="roster-remove" onclick="removeMember('${t}','${m}')">✕</button>
+          </div>`).join('') || '<div style="font-size:12px;color:var(--muted);font-style:italic;padding:4px 0;">Sem membros</div>'}
+      </div>
+      <div class="roster-input-row">
+        <input type="text" id="roster-inp-${t}" placeholder="Nome do membro..." maxlength="30" onkeydown="if(event.key==='Enter')addMember('${t}')" />
+        <button class="roster-add-btn" onclick="addMember('${t}')">+ Add</button>
+      </div>
+    </div>`).join('');
+}
+
+function addMember(team) {
+  const inp = document.getElementById(`roster-inp-${team}`);
+  const name = inp.value.trim();
+  if (!name) return;
+  if (!teamRosters[team]) teamRosters[team] = [];
+  if (!teamRosters[team].includes(name)) teamRosters[team].push(name);
+  inp.value = '';
+  renderRosterEditor();
+}
+
+function removeMember(team, name) {
+  teamRosters[team] = (teamRosters[team] || []).filter(m => m !== name);
+  renderRosterEditor();
+}
+
+function saveRosters() {
+  if (ws && ws.readyState === WebSocket.OPEN) {
+    ws.send(JSON.stringify({ type: 'update_rosters', rosters: teamRosters }));
+    const saved = document.getElementById('roster-saved');
+    saved.style.display = '';
+    setTimeout(() => saved.style.display = 'none', 2500);
+  }
+}
+
+function renderMasterRosters() {
+  const container = document.getElementById('master-rosters');
+  if (!container) return;
+  const teams = ['branco', 'amarelo', 'azul', 'verde'];
+  container.innerHTML = `<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">` +
+    teams.map(t => `
+      <div style="border:1px solid rgba(240,192,64,.15);border-radius:7px;padding:10px;">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:${TEAM_COLORS[t]};margin-bottom:6px;display:flex;align-items:center;gap:6px;">
+          ${teamDot(t, 8)} ${TEAM_LABELS[t]}
+        </div>
+        ${(teamRosters[t]||[]).map(m => `<div style="font-size:13px;padding:3px 0;border-bottom:1px solid rgba(255,255,255,.05);">${m}</div>`).join('') ||
+          '<div style="font-size:12px;color:var(--muted);font-style:italic;">Vazio</div>'}
+      </div>`).join('') + `</div>`;
+}
+
+// ── Spectator ─────────────────────────────────────────────────────────────────
+function renderSpectatorState(msg) {
+  const isPlaying = msg.gameStatus === 'playing' || msg.gameStatus === 'finished';
+  document.getElementById('spec-waiting').style.display = isPlaying ? 'none' : '';
+  document.getElementById('spec-playing').style.display = isPlaying ? '' : 'none';
+  document.getElementById('spec-status').textContent = isPlaying ? '⚽ Jogo em andamento' : 'Aguardando início...';
+
+  // Waiting players
+  const ul = document.getElementById('spec-players-list');
+  ul.innerHTML = (msg.players||[]).map(p => `
+    <li class="player-item">${teamDot(p.team,10)} <span>${p.name}</span> ${teamBadge(p.team)}</li>`
+  ).join('') || '<li class="player-item" style="color:var(--muted);font-style:italic;">Aguardando jogadores...</li>';
+
+  if (!isPlaying) return;
+
+  // Scoreboard
+  const sb = document.getElementById('spec-scoreboard');
+  const sorted = [...(msg.players||[])].sort((a,b) => b.found - a.found || a.totalClicks - b.totalClicks);
+  sb.innerHTML = sorted.map((p,i) => `
+    <div class="score-item">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span style="font-family:'Barlow Condensed',sans-serif;font-size:14px;color:var(--muted);width:20px;">${i+1}.</span>
+        ${teamDot(p.team,10)} <span>${p.name}</span> ${teamBadge(p.team)}
+      </div>
+      <span class="score-count">${p.found}/${msg.totalErrors}</span>
+    </div>`).join('') || '<div style="color:var(--muted);font-style:italic;padding:10px;">Aguardando jogadores...</div>';
+
+  // Progress bars
+  const pb = document.getElementById('spec-progress-bars');
+  pb.innerHTML = sorted.map(p => {
+    const pct = msg.totalErrors > 0 ? (p.found / msg.totalErrors * 100) : 0;
+    const color = TEAM_COLORS[p.team] || '#888';
+    return `<div class="spec-progress-item">
+      <div class="spec-prog-label">
+        <span style="display:flex;align-items:center;gap:6px;">${teamDot(p.team,8)} ${p.name}</span>
+        <span style="color:${color};">${p.found}/${msg.totalErrors}</span>
+      </div>
+      <div class="spec-prog-bar"><div class="spec-prog-fill" style="width:${pct}%;background:${color};"></div></div>
+    </div>`;
+  }).join('');
+
+  if (msg.winner) {
+    showWinnerOverlay(msg.winner);
+    if (msg.gameStatus === 'finished') {
+      setTimeout(() => showRanking(sorted), 4000);
+    }
+  }
+}
+
+// ── Master actions ────────────────────────────────────────────────────────────
+function masterStart() {
+  if (ws && ws.readyState === WebSocket.OPEN) ws.send(JSON.stringify({ type: 'master_start' }));
+}
+function masterAnnounce() {
+  if (confirm('Encerrar o jogo agora para todos, mesmo sem 3 finalistas?')) {
+    if (ws && ws.readyState === WebSocket.OPEN) ws.send(JSON.stringify({ type: 'announce_winner' }));
+  }
+}
+function masterReset() {
+  if (confirm('Reiniciar o jogo? Todos os dados serão apagados.')) {
+    if (ws && ws.readyState === WebSocket.OPEN) ws.send(JSON.stringify({ type: 'master_reset' }));
+  }
+}
+
+// ── Reset game ────────────────────────────────────────────────────────────────
+function resetGameState() {
+  found = []; totalClicks = 0;
+  document.getElementById('g-finished').style.display = 'none';
+  document.getElementById('g-pending').style.display  = 'none';
+  document.getElementById('overlay').classList.remove('show');
+  document.getElementById('ranking-overlay').classList.remove('show');
+  document.getElementById('penalty-bar').style.display = 'none';
+  if (penaltyTimer) clearInterval(penaltyTimer);
+  // Clear markers
+  document.querySelectorAll('.marker').forEach(m => m.remove());
+  // Master panel
+  if (isMaster) {
+    document.getElementById('master-winner-preview').style.display = 'none';
+    const fp = document.getElementById('finishers-preview');
+    if (fp) fp.style.display = 'none';
+  }
+  updateFoundDisplay();
+}
+
+// ── Session restore ───────────────────────────────────────────────────────────
+// ── Proteções básicas contra "espertinhos" ────────────────────────────────────
+// (não são à prova de usuários avançados, mas bloqueiam atalhos comuns)
+document.addEventListener('contextmenu', (e) => {
+  if (e.target.closest('.img-wrap')) e.preventDefault(); // bloqueia "salvar imagem como"
+});
+document.addEventListener('dragstart', (e) => {
+  if (e.target.tagName === 'IMG') e.preventDefault(); // bloqueia arrastar imagem
+});
+document.addEventListener('keydown', (e) => {
+  // Bloqueia atalhos comuns de devtools/inspect/print durante o jogo
+  const blocked =
+    e.key === 'F12' ||
+    (e.ctrlKey && e.shiftKey && ['I','J','C'].includes(e.key.toUpperCase())) ||
+    (e.ctrlKey && e.key.toUpperCase() === 'U') ||
+    (e.ctrlKey && e.key.toUpperCase() === 'P') ||
+    (e.ctrlKey && e.key.toUpperCase() === 'S');
+  const onGamePage = document.getElementById('page-game').classList.contains('active');
+  if (blocked && onGamePage && !isMaster) e.preventDefault();
+});
+
+window.addEventListener('load', () => {
+  const s = JSON.parse(localStorage.getItem('cx_var_session') || 'null');
+  if (s && s.roomId) {
+    connect(() => ws.send(JSON.stringify({ type: 'join', ...s })));
+  }
+});
+</script>
+</body>
+</html>
