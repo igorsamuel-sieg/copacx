@@ -63,7 +63,7 @@
     .wrap {
       position: relative;
       z-index: 1;
-      max-width: 1000px;
+      max-width: 1400px;
       margin: 0 auto;
       padding: 20px 16px 60px;
     }
@@ -633,21 +633,20 @@
     .spec-prog-bar { height: 8px; background: rgba(255,255,255,.1); border-radius: 10px; overflow: hidden; }
     .spec-prog-fill { height: 100%; border-radius: 10px; transition: width .4s; }
 
-    /* ── Gabarito side by side (master) ── */
+    /* ── Imagens lado a lado ── */
     .images-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; }
-    @media(max-width: 600px) { .images-grid { grid-template-columns: 1fr; } }
+    @media(max-width: 700px) { .images-grid { grid-template-columns: 1fr; } }
+    .img-col { display: flex; flex-direction: column; gap: 6px; }
     .img-label {
-      position: absolute;
-      top: 6px; left: 6px;
-      background: rgba(0,0,0,.8);
-      color: var(--gold);
       font-family: 'Barlow Condensed', sans-serif;
-      font-size: 10px;
-      letter-spacing: 1px;
-      padding: 3px 8px;
-      border-radius: 4px;
-      border: 1px solid rgba(240,192,64,.3);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: var(--gold);
       text-transform: uppercase;
+      text-align: center;
+      padding: 4px 0;
+      border-bottom: 1px solid rgba(240,192,64,.2);
     }
 
     /* Kick button */
@@ -810,26 +809,40 @@
       <p id="penalty-text"></p>
     </div>
 
-    <!-- PLAYER: imagem B (lado direito) para clicar -->
+    <!-- PLAYER: imagens A e B lado a lado — só B é clicável -->
     <div id="player-game-area">
-      <p class="hint">⬇ Clique nas diferenças na IMAGEM B</p>
-      <div class="img-wrap" id="img-game" onclick="handleClick(event)">
-        <div class="img-label">IMAGEM B — Encontre os erros</div>
-        <img src="/images/modified.webp" alt="Imagem do jogo" id="game-img" />
+      <p class="hint">👀 Compare as imagens e clique nas diferenças na <strong style="color:var(--gold)">IMAGEM B</strong></p>
+      <div class="images-grid">
+        <div class="img-col">
+          <div class="img-label">IMAGEM A — Original</div>
+          <div class="img-wrap" style="cursor:default;">
+            <img src="/images/original.svg" alt="Imagem original" style="pointer-events:none;" />
+          </div>
+        </div>
+        <div class="img-col">
+          <div class="img-label">IMAGEM B — Clique nas diferenças ⬅</div>
+          <div class="img-wrap" id="img-game" onclick="handleClick(event)">
+            <img src="/images/modified.svg" alt="Imagem do jogo" id="game-img" />
+          </div>
+        </div>
       </div>
     </div>
 
-    <!-- MASTER: gabarito lado a lado -->
+    <!-- MASTER: A limpa + B com gabarito anotado -->
     <div id="master-game-area" style="display:none;">
-      <p class="hint">Gabarito visível somente para você, Master</p>
+      <p class="hint">Gabarito com marcações visível somente para você, Master</p>
       <div class="images-grid">
-        <div class="img-wrap">
-          <div class="img-label">Gabarito</div>
-          <img id="gabarito-img" src="" alt="Gabarito" />
+        <div class="img-col">
+          <div class="img-label">IMAGEM A — Original</div>
+          <div class="img-wrap">
+            <img src="/images/original.svg" alt="Original" />
+          </div>
         </div>
-        <div class="img-wrap">
-          <div class="img-label">Imagem do Jogo</div>
-          <img src="/images/modified.webp" alt="Jogo" />
+        <div class="img-col">
+          <div class="img-label">IMAGEM B — Gabarito (erros marcados)</div>
+          <div class="img-wrap">
+            <img id="gabarito-img" src="" alt="Gabarito" />
+          </div>
         </div>
       </div>
     </div>

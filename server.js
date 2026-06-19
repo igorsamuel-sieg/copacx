@@ -67,24 +67,24 @@ function createPlayer(id, name, team, isMaster) {
   };
 }
 
-// ── 7 erros mapeados na Imagem B (coordenadas relativas 0-1 da imagem completa) ──
-// Diferenças reais entre Imagem A e Imagem B:
-//  1. Placar do CX SIEG FC: o "2" azul virou "3"
-//  2. Bandeirola "GARRA / FOCO / RESULTADO": a linha "FOCO" foi removida
-//  3. Troféu pequeno (ícone neon dourado) ao lado da bandeirola: desapareceu
-//  4. Bola de futebol: o texto "CX" virou "FC"
-//  5. Caneca: o texto "EM FOCO" virou "EM TIME"
-//  6. Caderno: o texto "SOLUÇÃO" virou "ENTREGA"
-//  7. Placa "ATITUDE / AGILIDADE / RESPEITO": a linha "AGILIDADE" foi removida
+// ── 7 erros mapeados na Imagem B — coordenadas geradas por generate-images.js ──
+// Layout: 6 linhas × 14 colunas, célula 100×80px, SVG 1400×480
+//  1. Linha 1 col 12 — bandeira invertida (verde/amarelo/azul → azul/amarelo/verde)
+//  2. Linha 2 col  5 — chapéu de bola amarela aparece
+//  3. Linha 3 col 14 — boné azul → verde
+//  4. Linha 4 col  2 — camisa branca → amarela
+//  5. Linha 4 col 10 — camisa verde → azul
+//  6. Linha 5 col 13 — óculos aparecem
+//  7. Linha 6 col  6 — boné amarelo → azul
 
 const ERRORS = [
-  { x: 0.7636, y: 0.3275, r: 0.045, label: 'Placar 2→3' },
-  { x: 0.9137, y: 0.3242, r: 0.045, label: 'Bandeirola: FOCO removido' },
-  { x: 0.9596, y: 0.4154, r: 0.045, label: 'Troféu removido' },
-  { x: 0.8655, y: 0.7209, r: 0.045, label: 'Bola: CX→FC' },
-  { x: 0.5653, y: 0.8176, r: 0.045, label: 'Caneca: EM FOCO→EM TIME' },
-  { x: 0.6703, y: 0.8319, r: 0.045, label: 'Caderno: SOLUÇÃO→ENTREGA' },
-  { x: 0.9432, y: 0.7253, r: 0.045, label: 'Placa: AGILIDADE removida' },
+  { x: 0.8214, y: 0.0833, r: 0.05, label: 'Bandeira invertida (r0c11)' },
+  { x: 0.3214, y: 0.2500, r: 0.05, label: 'Chapéu bola amarela (r1c4)' },
+  { x: 0.9643, y: 0.4167, r: 0.05, label: 'Boné azul→verde (r2c13)' },
+  { x: 0.1071, y: 0.5833, r: 0.05, label: 'Camisa branca→amarela (r3c1)' },
+  { x: 0.6786, y: 0.5833, r: 0.05, label: 'Camisa verde→azul (r3c9)' },
+  { x: 0.8929, y: 0.7500, r: 0.05, label: 'Óculos aparecem (r4c12)' },
+  { x: 0.3929, y: 0.9167, r: 0.05, label: 'Boné amarelo→azul (r5c5)' },
 ];
 const TOTAL_ERRORS = ERRORS.length; // 7
 
@@ -449,14 +449,16 @@ app.get('/images/gabarito.png', (req, res) => {
   const rec = masterTokens.get(token);
   if (!rec) return res.status(403).send('Forbidden');
   if (rec.ip && rec.ip !== ip) return res.status(403).send('Forbidden'); // token vinculado a outro IP
-  res.sendFile(path.join(__dirname, 'public/images/original.webp'));
+  res.set('Content-Type', 'image/svg+xml');
+  res.sendFile(path.join(__dirname, 'public/images/gabarito-annotated.svg'));
 });
 
 app.use('/images', express.static(path.join(__dirname, 'public/images'), {
   index: false,
   setHeaders: (res, filePath) => {
-    // Bloqueia acesso direto ao gabarito (original.webp) sem passar pela rota protegida acima
-    if (filePath.endsWith('original.webp')) res.status(403).end();
+    if (filePath.endsWith('original.webp') || filePath.endsWith('gabarito-annotated.svg')) {
+      res.status(403).end();
+    }
   }
 }));
 app.use(express.static(path.join(__dirname, 'public')));
